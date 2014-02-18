@@ -9,10 +9,11 @@ Created on Sun Feb  2 11:24:42 2014
 from amino_acids import aa, codons
 from random import shuffle
 from load import load_seq
-dna = load_seq("./data/X73525.fa")
+
 
 def collapse(L):
     """ Converts a list of strings to a string by concatenating all elements of the list """
+    # Try "".join(L) for shorter code
     output = ""
     for s in L:
         output = output + s
@@ -34,9 +35,9 @@ def coding_strand_to_AA(dna):
             for k in range(len(codons[j])):
                 if dna[3*i:3*i+3] == codons[j][k]:
                     code += aa[j]
+                    # You can your code more efficient by breaking out of the amino acid search after you've found 1 match
     return code
 
-print coding_strand_to_AA("ATGCCCGCTTTT")
 
 def coding_strand_to_AA_unit_tests():
     """ Unit tests for the coding_strand_to_AA function """
@@ -44,7 +45,6 @@ def coding_strand_to_AA_unit_tests():
     print "expected output: " + "MPAF"
     print "actual output: " + coding_strand_to_AA("ATGCCCGCTTTT")
     
-coding_strand_to_AA_unit_tests()
 
 def get_reverse_complement(dna):
     """ Computes the reverse complementary sequence of DNA for the specfied DNA
@@ -65,7 +65,6 @@ def get_reverse_complement(dna):
             complement+= 'C'
     
     return complement[::-1]
-print get_reverse_complement("ATGCCCGCTTT")
     
 def get_reverse_complement_unit_tests():
     """ Unit tests for the get_complement function """
@@ -73,7 +72,6 @@ def get_reverse_complement_unit_tests():
     print "expected output: " + "ATAAGCGGGCAT"
     print "actual output: " + get_reverse_complement("ATGCCCGCTTAT")  
     
-get_reverse_complement_unit_tests()
 
 def rest_of_ORF(dna):
     """ Takes a DNA sequence that is assumed to begin with a start codon and returns
@@ -90,7 +88,6 @@ def rest_of_ORF(dna):
         codelove+=dna[3*i:3*i+3]
     return codelove
 
-print rest_of_ORF("ATGAGATAGG")
 
 def rest_of_ORF_unit_tests():
     """ Unit tests for the rest_of_ORF function """
@@ -98,7 +95,6 @@ def rest_of_ORF_unit_tests():
     print "expected output: " + "ATGAGA"
     print "actual output: " + rest_of_ORF("ATGAGATAGGG")  
     
-rest_of_ORF_unit_tests()
 
 def find_all_ORFs_oneframe(dna):
     """ Finds all non-nested open reading frames in the given DNA sequence and returns
@@ -121,7 +117,6 @@ def find_all_ORFs_oneframe(dna):
             i+=1
     return codelove
 
-print find_all_ORFs_oneframe("ATGCATGAATGTAGATAGATGTGCCC")
 
 def find_all_ORFs_oneframe_unit_tests():
     """ Unit tests for the find_all_ORFs_oneframe function """
@@ -130,7 +125,6 @@ def find_all_ORFs_oneframe_unit_tests():
     print "expected output: " + "['ATGCATGAATGTAGA', 'ATGTGCACC']"
     print "actual output: " + str(find_all_ORFs_oneframe("ATGCATGAATGTAGATAGATGTGCACC"))
 
-find_all_ORFs_oneframe_unit_tests()
 
 def find_all_ORFs(dna):
     """ Finds all non-nested open reading frames in the given DNA sequence in all 3
@@ -146,7 +140,6 @@ def find_all_ORFs(dna):
         new.extend(find_all_ORFs_oneframe(dna[i:]))
     return new
 
-print find_all_ORFs("ATGCATGAATGTAG")            
 
 def find_all_ORFs_unit_tests():
     """ Unit tests for the find_all_ORFs function """
@@ -154,7 +147,6 @@ def find_all_ORFs_unit_tests():
     print "expected output: " + "['ATGCATGAATGT', 'ATGAATGTA', 'ATG']"
     print "actual output: " + str(find_all_ORFs("ATGCATGAATGTAG"))
 
-find_all_ORFs_unit_tests()
 
 def find_all_ORFs_both_strands(dna):
     """ Finds all non-nested open reading frames in the given DNA sequence on both
@@ -168,7 +160,6 @@ def find_all_ORFs_both_strands(dna):
     
     return loco1
 
-print find_all_ORFs_both_strands("ATGCGAATGTAGCATCAAA")
 
 def find_all_ORFs_both_strands_unit_tests():
     """ Unit tests for the find_all_ORFs_both_strands function """
@@ -177,18 +168,16 @@ def find_all_ORFs_both_strands_unit_tests():
     print "expected output: " + "['ATGCGAATG', 'ATGCTACATTCGCAT']"
     print "actual output: " + str(find_all_ORFs_both_strands("ATGCGAATGTAGCATCAAAA"))
 
-find_all_ORFs_both_strands_unit_tests()
 
 def longest_ORF(dna):
     """ Finds the longest ORF on both strands of the specified DNA and returns it
         as a string"""
     if find_all_ORFs_both_strands(dna)==[]:
         return ''
-    else:
+    else: # is there a point to assigning a variable "a"here? why not use return the expression?
         a=max(find_all_ORFs_both_strands(dna),key=len)
         return a
     
-print longest_ORF("ATGCGAATGTAGCATTCAAA")
 
 def longest_ORF_unit_tests():
     """ Unit tests for the longest_ORF function """
@@ -196,7 +185,6 @@ def longest_ORF_unit_tests():
     print "expected output: " + "ATGCTACATTCGCAT"
     print "actual output: " + str(longest_ORF("ATGCGAATGTAGCATTCAAA"))
 
-longest_ORF_unit_tests()
 
 def longest_ORF_noncoding(dna, num_trials):
     """ Computes the maximum length of the longest ORF over num_trials shuffles
@@ -214,7 +202,6 @@ def longest_ORF_noncoding(dna, num_trials):
             lorg = f                
     return len(lorg)
 
-print longest_ORF_noncoding(dna,1500)
                 
 def gene_finder(dna, threshold):
     """ Returns the amino acid sequences coded by all genes that have an ORF
@@ -232,9 +219,38 @@ def gene_finder(dna, threshold):
     while r<len(loco2):
             if len(loco2[r])>threshold:
                 p.append(coding_strand_to_AA(loco2[r]))
-                r+=1
+                r+=1 # If you're going to be r += 1 no matter what happens, take them out of the if else statements
             else:
                 r+=1
+    """ Edit - without while loop 
+    p = []
+    for r in loco2:
+        if len(r) < threshold:
+            p.append(coding_strand_to_AA(r))
     return p
-    
-print gene_finder(dna, 666)
+    """
+
+    return p
+
+if __name__ == "__main__": 
+    # It's great that you're running tests on all your functions, but please put them in an
+    # if __name__ == "__main__" statement to prevent side-effect printing to occur when we 
+    # import your module. 
+    # Also, try doing stress tests with your tests next time. (extreme arguments - empty string, wrong # of strings, wrong characters, etc...)
+    dna = load_seq("./data/X73525.fa")
+    print coding_strand_to_AA_unit_tests
+    coding_strand_to_AA_unit_tests()
+    print get_reverse_complement("ATGCCCGCTTT")
+    get_reverse_complement_unit_tests()
+    print rest_of_ORF("ATGAGATAGG")
+    rest_of_ORF_unit_tests()
+    print find_all_ORFs_oneframe("ATGCATGAATGTAGATAGATGTGCCC")
+    find_all_ORFs_oneframe_unit_tests()
+    print find_all_ORFs("ATGCATGAATGTAG")            
+    find_all_ORFs_unit_tests()
+    print find_all_ORFs_both_strands("ATGCGAATGTAGCATCAAA")
+    find_all_ORFs_both_strands_unit_tests()
+    print longest_ORF("ATGCGAATGTAGCATTCAAA")
+    longest_ORF_unit_tests()
+    print longest_ORF_noncoding(dna,1500)
+    print gene_finder(dna, 666)
