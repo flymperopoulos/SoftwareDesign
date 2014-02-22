@@ -2,7 +2,7 @@
 """
 Created on Tue Feb 11 11:34:57 2014
 
-@author: pruvolo
+@author: #Write your name here
 """
 
 from __future__ import division
@@ -28,7 +28,8 @@ def build_random_function(min_depth, max_depth):
             return [rand_func, build_random_function(depth-1,depth-1)]
         elif rand_func in functions[3:]:
             return [rand_func,build_random_function(depth-1,depth-1),build_random_function(depth-1,depth-1)]
-f=build_random_function(7, 8)
+
+
 def evaluate_random_function(f, x, y):
 
     """Inputs a random function along with two random variables x,y, which 
@@ -59,29 +60,35 @@ def remap_interval(val, input_interval_start, input_interval_end, output_interva
         is an affine one (i.e. output = input*c + b).Then it returns the 
         output value in the given resulting range.
     """
+    #Are you sure this does float division?
     ratio=(val-input_interval_start)/(input_interval_end-input_interval_start)
     return (ratio*(output_interval_end-output_interval_start)+output_interval_start)
-    
-im = Image.new("RGB",(350,350))
-red_function = build_random_function(5,14)
-green_function = build_random_function(7,20)
-blue_function = build_random_function(6,15)
-pixels=im.load()
 
-for i in range(350):
-    for j in range(350):
-        x=remap_interval(i,0,350,-1,1)
-        y=remap_interval(j,0,350,-1,1)
-        r1=evaluate_random_function(red_function,x,y)
-        g1=evaluate_random_function(green_function,x,y)        
-        b1=evaluate_random_function(blue_function,x,y)
-        r=remap_interval(r1,-1,1,0,255)
-        g=remap_interval(g1,-1,1,0,255)
-        b=remap_interval(b1,-1,1,0,255)
-        pixels[i,j]=(int(r), int(g), int(b))
+def drawImage(windowX, windowY):
+    """
+    Put this in a function or run it in __main__ conditional
+    """
+    im = Image.new("RGB",(350,350))
+    red_function = build_random_function(5,14)
+    green_function = build_random_function(7,20)
+    blue_function = build_random_function(6,15)
+    pixels=im.load()
 
-im.save("example1.JPEG")
+    for i in range(350):
+        for j in range(350):
+            x=remap_interval(i,0,350,-1,1)
+            y=remap_interval(j,0,350,-1,1)
+            r1=evaluate_random_function(red_function,x,y)
+            g1=evaluate_random_function(green_function,x,y)        
+            b1=evaluate_random_function(blue_function,x,y)
+            r=remap_interval(r1,-1,1,0,255)
+            g=remap_interval(g1,-1,1,0,255)
+            b=remap_interval(b1,-1,1,0,255)
+            pixels[i,j]=(int(r), int(g), int(b))
+
+    im.save("example1.JPEG")
     
 if __name__=="__main__":
-    print f
+    # f=build_random_function(7, 8)
+    # print f
     print evaluate_random_function(f, .4, .7)
