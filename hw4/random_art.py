@@ -2,7 +2,10 @@
 """
 Created on Tue Feb 11 11:34:57 2014
 
-@author: pruvolo
+@author: Filippos Lymperopoulos
+
+This porject involved the use of recursion to create cool images of computational art.
+
 """
 
 from __future__ import division
